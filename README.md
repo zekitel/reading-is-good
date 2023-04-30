@@ -13,8 +13,7 @@ Aim of Reading Is Good Applicaiton is to deliver books to the customers who are 
 - [Application Tech Stack](#application-tech-stack)
 - [Docker Build and Run](#docker-build-and-run)
 - [Api Endpoints](#api-endpoints)
-  - [Health Check](#health-check)
-  - [authenticate with credentials and get token](#auth)
+  - [Authenticate and Get Token](#authenticate-and-get-token)
   - [Add New Book](#add-new-book)
   - [Update Book Stock](#update-book-stock)
   - [Add New Customer](#add-new-customer) 
@@ -23,12 +22,8 @@ Aim of Reading Is Good Applicaiton is to deliver books to the customers who are 
   - [List Orders By Date](#list-orders-by-date)
   - [List Orders By Customer](#list-orders-by-customer) 
   - [Get Customer Monthly Statistics](#get-customer-monthly-statistics)
-  
-
-  - [Api Doc](#api-doc)
-- [Initial Data Load to Tables](#initial-data-load-to-tables)
-- [Validation Messages](#validation-messages)
-- [Authentication and Important Notes!](#authentication-and-important-notes!)
+- [Swagger ui](#swagger-ui) 
+- [Authentication and Important Notes](#authentication-and-important-notes)
 - [Test Coverage Rate](#test-coverage-rate)
 
 
@@ -186,7 +181,7 @@ The swagger ui shows the api interface but you need to authenticate and get toke
 
 GET :  http://localhost:9090/swagger-ui/index.html
 
-### Authentication and Important Notes!
+### Authentication and Important Notes
 You won't be able to request without bearer token, so please get bearer token at first.
 For getting token >
 
@@ -213,11 +208,19 @@ all classes	84,4% (38/45)	77,2% (159/206)	79,4% (351/442)
 And details;
 
 com.casestudy.readingisgood.config	100% (1/1)	100% (5/5)	100% (14/14)
+
 com.casestudy.readingisgood.controller	100% (5/5)	42,9% (6/14)	37,5% (6/16)
+
 com.casestudy.readingisgood.dto	100% (11/11)	93,2% (55/59)	93,2% (55/59)
+
 com.casestudy.readingisgood.entity	77,8% (7/9)	79,6% (43/54)	80% (44/55)
+
 com.casestudy.readingisgood.enums	100% (1/1)	100% (2/2)	100% (2/2)
+
 com.casestudy.readingisgood.exception	16,7% (1/6)	4,3% (1/23)	2,3% (1/44)
+
 com.casestudy.readingisgood.security	100% (7/7)	96,6% (28/29)	90,4% (75/83)
+
 com.casestudy.readingisgood.service	100% (1/1)	100% (2/2)	100% (69/69)
+
 com.casestudy.readingisgood.service.impl	100% (3/3)	100% (16/16)	85,7% (84/98)
