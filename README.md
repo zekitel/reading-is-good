@@ -61,7 +61,7 @@ The application developed with
 
 `docker build --tag=reading-is-good:1.0 .`
 
-`docker run -p 8090:8090 reading-is-good:1.0 .`
+`docker run -p 9090:9090 reading-is-good:1.0 .`
 
 
 ### Api Endpoints
@@ -135,7 +135,7 @@ Body should be like;
 
 #### Add New Order
 
-POST: http://localhost:8090/orders
+POST: http://localhost:9090/api/order/create
 
 Request Body should be like;
 {
