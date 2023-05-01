@@ -36,11 +36,8 @@ You will be finding details about project bellow.
 
 App will run on 9090 port.
 
-When you are running to started this app on your pc;
-In the CreateDefaultDataService, I will put some code  to insert data into tables.
-
-Initially, some example data will be created on tables.
-
+Once the app is started to run on the local, database tables will be inserted with some initial records. 
+Details can be found in the CreateDefaultDataService.
 
 ### Application Tech Stack
 
@@ -69,11 +66,11 @@ The application developed with
 Postman collection is here 
 [readingisgood.postman_collection.json](https://github.com/zekitel/reading-is-good/tree/master/src/main/resources/postman-collection/readingisgood.postman_collection.json)
 
-You will be found postman collection under `resource/postman-collection`
+Postman collections can be found under `resource/postman-collection`
 
 ***Not that: Please be aware of getting token at the first. Otherwise, you will get unauthorized error without token*** 
 
-*If the file does not open for any reason, please consider the requests below.*
+*If the file cannot be opened for any reason, please consider the requests below.*
 
 
 #### Authenticate and Get Token
