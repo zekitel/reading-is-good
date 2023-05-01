@@ -1,10 +1,9 @@
 package com.casestudy.readingisgood.service.impl;
 
-import com.casestudy.readingisgood.dto.CustomerDto;
+import com.casestudy.readingisgood.dto.CustomerDTO;
 import com.casestudy.readingisgood.entity.Customer;
 import com.casestudy.readingisgood.repository.CustomerRepository;
 import com.casestudy.readingisgood.service.CustomerService;
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +26,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public CustomerDto create(CustomerDto customerDto) {
+    public CustomerDTO create(CustomerDTO customerDto) {
         log.info("Customer create started. Coming data: . Customerdto:{}", customerDto);
         Customer customer = modelMapper.map(customerDto, Customer.class);
         Customer result = customerRepository.save(customer);
         log.info("Customer create finished. result data: . Customer: {}", result);
-        return CustomerDto.builder()
+        return CustomerDTO.builder()
                 .firstName(result.getFirstName())
                 .lastName(result.getLastName())
                 .email(result.getEmail())

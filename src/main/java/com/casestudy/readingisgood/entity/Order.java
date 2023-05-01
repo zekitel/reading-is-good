@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -35,7 +36,7 @@ public class Order extends Auditable {
     private Long bookCount;
 
     @Column(name = "order_amount")
-    private Double orderAmount;
+    private BigDecimal orderAmount;
 
     @Column(name = "order_time")
     @CreationTimestamp

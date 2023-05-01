@@ -1,20 +1,24 @@
 package com.casestudy.readingisgood.service;
 
-import com.casestudy.readingisgood.dto.BookDto;
+import com.casestudy.readingisgood.dto.BookDTO;
 import com.casestudy.readingisgood.entity.Book;
 import com.casestudy.readingisgood.exception.DbNotFoundException;
+import com.casestudy.readingisgood.exception.ResourceAlreadyExistsException;
 import com.casestudy.readingisgood.exception.StockValueChangedException;
 import com.casestudy.readingisgood.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class BookServiceTest {
 
     @Autowired
@@ -25,22 +29,22 @@ class BookServiceTest {
     private BookRepository bookRepository;
 
     @Test
-    void createNewBook() {
+    void createNewBook() throws ResourceAlreadyExistsException {
 
 
         List<Book> all = bookRepository.findAll();
 
         assertThat(all).hasSize(4);
 
-        BookDto book1 = BookDto.builder()
+        BookDTO book1 = BookDTO.builder()
                 .title("test_book1")
                 .author("test_author1")
                 .isbn("12312334561")
-                .price(10.0)
+                .price(BigDecimal.valueOf(10.0))
                 .stock(4L)
                 .build();
 
-        BookDto newBook = bookService.createNewBook(book1);
+        BookDTO newBook = bookService.persist(book1);
         all = bookRepository.findAll();
 
         assertThat(newBook.getId()).isNotNull();
@@ -53,7 +57,7 @@ class BookServiceTest {
     void updateStock() throws DbNotFoundException, StockValueChangedException {
 
         List<Book> all = bookRepository.findAll();
-        assertThat(all.get(0).getStock()).isEqualTo(4);
+        assertThat(all.get(0).getStock()).isEqualTo(2);
         assertThat(all.get(0).getId()).isEqualTo(1);
 
         Long stock = 190L;
@@ -64,13 +68,13 @@ class BookServiceTest {
     }
 
     @Test
-    void findBookById() {
+    void findBookById() throws DbNotFoundException {
         List<Book> all = bookRepository.findAll();
-        assertThat(all.get(0).getStock()).isEqualTo(4);
+        assertThat(all.get(0).getStock()).isEqualTo(2);
         assertThat(all.get(0).getId()).isEqualTo(1);
 
 
-        Book bookById = bookService.findBookById(all.get(0).getId());
+        Book bookById = bookService.findById(all.get(0).getId());
 
         assertThat(bookById.getStock()).isEqualTo(all.get(0).getStock());
         assertThat(bookById.getIsbn()).isEqualTo(all.get(0).getIsbn());

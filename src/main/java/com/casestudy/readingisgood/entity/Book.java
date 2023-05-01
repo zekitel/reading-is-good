@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -33,7 +35,7 @@ public class Book extends Auditable {
 
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "stock")
     private Long stock;

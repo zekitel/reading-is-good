@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @Setter
@@ -26,5 +28,5 @@ public class OrderStatistic  extends Auditable {
     @Column(name = "total_book_count")
     private Long totalBookCount;
     @Column(name = "total_purchased_amount")
-    private double totalPurchasedAmount;
+    private BigDecimal totalPurchasedAmount;
 }

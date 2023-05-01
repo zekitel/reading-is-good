@@ -3,26 +3,27 @@ Reading is good for Getir Case Study
 
 ## Reading Is Good Application
 
-##### This app has been developed as Restful APIs with Spring Boot 
+##### This app has been developed as Restful APIs with Spring Boot
 
 Aim of Reading Is Good Applicaiton is to deliver books to the customers who are ordered.
 
-### Contents 
+### Contents
 
 - [Welcome](#welcome)
 - [Application Tech Stack](#application-tech-stack)
+- [Important Maven Dependencies](#important-maven-dependencies)
 - [Docker Build and Run](#docker-build-and-run)
 - [Api Endpoints](#api-endpoints)
-  - [Authenticate and Get Token](#authenticate-and-get-token)
-  - [Add New Book](#add-new-book)
-  - [Update Book Stock](#update-book-stock)
-  - [Add New Customer](#add-new-customer) 
-  - [Add New Order](#add-new-order)
-  - [Get Order By Id](#get-order-by-id)
-  - [List Orders By Date](#list-orders-by-date)
-  - [List Orders By Customer](#list-orders-by-customer) 
-  - [Get Customer Monthly Statistics](#get-customer-monthly-statistics)
-- [Swagger ui](#swagger-ui) 
+    - [Authenticate and Get Token](#authenticate-and-get-token)
+    - [Add New Book](#add-new-book)
+    - [Update Book Stock](#update-book-stock)
+    - [Add New Customer](#add-new-customer)
+    - [Add New Order](#add-new-order)
+    - [Get Order By Id](#get-order-by-id)
+    - [List Orders By Date](#list-orders-by-date)
+    - [List Orders By Customer](#list-orders-by-customer)
+    - [Get Customer Monthly Statistics](#get-customer-monthly-statistics)
+- [Swagger ui](#swagger-ui)
 - [Authentication and Important Notes](#authentication-and-important-notes)
 - [Test Coverage Rate](#test-coverage-rate)
 
@@ -32,25 +33,33 @@ Aim of Reading Is Good Applicaiton is to deliver books to the customers who are 
 
 Welcome on reading is good board
 
-You will be finding details about project bellow.
+The project details will be finding  bellow.
 
-App will run on 9090 port.
+App will run on 9091 port.
 
-Once the app is started to run on the local, database tables will be inserted with some initial records. 
+Once the app is started to run on the local, database tables will be inserted with some initial records.
 Details can be found in the CreateDefaultDataService.
 
 ### Application Tech Stack
 
-The application developed with 
-- **java 17**
-- **Springboot**
-- **H2 database**
+- **Java 17**
+- **Spring Boot**
+- **Maven**
+- **Docker**
+- **Maven**
+- **Swagger Open API Specification**
+- **JWT**
+- **JUnit5, Mockito Testing**
+- **H2 In Memory Database**
+
+### Important Maven Dependencies
+
 - **spring-boot-data-jpa**
 - **Lombok**
 - **spring-boot-starter-validation**
 - **spring-boot-starter-test, mockito and junit5**
-- **spring-boot-starter-security** 
-- **springdoc-openapi-ui** 
+- **spring-boot-starter-security**
+- **springdoc-openapi-ui**
 
 ***Version 3.0.6 was used for all dependencies related to spring boot!***
 
@@ -58,24 +67,24 @@ The application developed with
 
 `docker build --tag=reading-is-good:1.0 .`
 
-`docker run -p 9090:9090 reading-is-good:1.0 .`
+`docker run -p 9091:9091 reading-is-good:1.0 .`
 
 
 ### Api Endpoints
 
-Postman collection is here 
+Postman collection is here
 [readingisgood.postman_collection.json](https://github.com/zekitel/reading-is-good/tree/master/src/main/resources/postman-collection/readingisgood.postman_collection.json)
 
 Postman collections can be found under `resource/postman-collection`
 
-***Not that: Please be aware of getting token at the first. Otherwise, you will get unauthorized error without token*** 
+***Not that: Getting token at the first is very important. Otherwise, the response  will be unauthorized error without token***
 
 *If the file cannot be opened for any reason, please consider the requests below.*
 
 
 #### Authenticate and Get Token
 
-POST: http://localhost:9090/authenticate
+POST: http://localhost:9091/authenticate
 
 Your request body should be like this
 
@@ -85,128 +94,141 @@ Your request body should be like this
 }`
 
 
-This will return you a bearer token as => 
+This will return a bearer token as =>
 
-{
-  "jwtToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjgyODAxNjAzLCJleHAiOjE2ODI4MTk2MDN9.xPnJW2Sq7EW7DHwf31Drg6LL1TqOFozkj-NTxMDNLlc"
-}
+`{"jwtToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjgyODAxNjAzLCJleHAiOjE2ODI4MTk2MDN9.xPnJW2Sq7EW7DHwf31Drg6LL1TqOFozkj-NTxMDNLlc"}`
 
 This token should be added to Athorization Header as a bearer token like this.
 
-"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjgyODAxNjAzLCJleHAiOjE2ODI4MTk2MDN9.xPnJW2Sq7EW7DHwf31Drg6LL1TqOFozkj-NTxMDNLlc" 
+"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjgyODAxNjAzLCJleHAiOjE2ODI4MTk2MDN9.xPnJW2Sq7EW7DHwf31Drg6LL1TqOFozkj-NTxMDNLlc"
 
 ***Important!***
 
-For your postman requests please consider authorization, Unless you will get Unauthorized error.
+For the postman requests authorization should be considered, Otherwise Unauthorized error will be shown.
 
-*Authorization type should be chosen Bearer Token and paste your bearer token which you taken from getToken*
+*Authorization type should be chosen Bearer Token and the bearer token should be pasted *
 
 #### Add New Book
 
-POST: http://localhost:9090/api/book/save
+POST: http://localhost:9091/api/book/create
 
 Body should be like;
-{
-    "title":"NewBookTitle",
-    "author":"NewBookAuthor",
-    "price":18.9,
-    "isbn":"35313456",
-    "stock":56
-}
+
+`{
+"title":"NewBookTitle",
+"author":"NewBookAuthor",
+"price":18.9,
+"isbn":"35313456",
+"stock":56
+}`
 
 #### Update Book Stock
 
-PUT: http://localhost:9090/api/book/updateBookStock?bookStock=54&bookId=1
+PUT: http://localhost:9091/api/book/update-stock/5?stock=54
 
 
 #### Add New Customer
 
-POST: http://localhost:9090/api/customer/save
+POST: http://localhost:9091/api/customer/create
 
 Body should be like;
-{
-    "firstName":"CustomerName",
-    "lastName":"CustomerLastName",
-    "email":"abgt.da@gmail.com"
-}
+
+`{
+"firstName":"CustomerName",
+"lastName":"CustomerLastName",
+"email":"abgt.da@gmail.com"
+}`
 
 #### Add New Order
 
-POST: http://localhost:9090/api/order/create
+POST: http://localhost:9091/api/order/create
 
 Request Body should be like;
-{
-    "customerId":3,
-    "bookId":5,
-    "bookCount":2 
-}
+
+`{
+"customerId":3,
+"bookId":5,
+"bookCount":2
+}`
+
+* Racing Condition is handled by hibernate optimistic lock mechanism. To give more details, during  order creation,If the stock value of the book  is changed, At this moment, Hibernate will throw OptimisticLockException, then the exception will be caught and thrown as StockValueChangedException
+* In this endpoint, when an order persisted, an OrderStatistic entity is also persisted to query easily, this is the basic implementation of [CQRS Pattern](https://microservices.io/patterns/data/cqrs.html) is used to store and
+  query statistic data.
+
 
 
 #### Get Order By Id
 
-GET: http://localhost:9090/api/order/get?orderId=5
+GET: http://localhost:9091/api/order/5
 
 #### List Orders By Date
 
-POST : http://localhost:9090/api/order/listOrdersByDateInterval
+POST : http://localhost:9091/api/order/list-by-date-interval
 
-{
-    "pageSize":4,
-    "pageNumber":"0",
-    "startTimeStamp":1,
-    "endTimeStamp":12312315123123
-}
+`{
+"pageSize":4,
+"pageNumber":"0",
+"startDateTime":"2022-05-01T13:30:00.000Z",
+"endDateTime":"2023-05-01T23:30:00.000Z"
+}`
 
 #### List Orders By Customer
 
-POST : http://localhost:9090/api/order/listOrderByCustomer
-{
-    "pageSize":3,
-    "pageNumber":0,
-    "customerId":1
-}
+POST : http://localhost:9091/api/order/list-by-customer
+
+`{
+"pageSize":3,
+"pageNumber":0,
+"customerId":1
+}`
 
 #### Get Customer Monthly Statistics
 
-GET: http://localhost:9090/api/statistic/monthlyOrderStatistics?customerId=2
+GET: http://localhost:9091/api/statistic/monthly-order/2
+
+* This endpoint is responsible to querying monthly statistics of books and orders.
+* This is the usage of cqrs pattern
 
 
 
 ### Swagger ui
 
-The swagger ui shows the api interface but you need to authenticate and get token, and put that token to header of the request thats why swagger will not work.
+The swagger ui shows the api interface and requests. To execute that requests, authentication is needed.
+The bearer token should be requested by authentication and should be put to header of the request. That's why swagger will not work.
 
-GET :  http://localhost:9090/swagger-ui/index.html
+GET :  http://localhost:9091/swagger-ui/index.html
 
 ### Authentication and Important Notes
-You won't be able to request without bearer token, so please get bearer token at first.
+The requests can not be executed  without bearer token, so the bearer token  should be taken at first.
 For getting token >
 
 
-POST: http://localhost:9090/authenticate
+POST: http://localhost:9091/authenticate
 
-Your request body should be like this
+The request body should be like this
 
-{
+`{
 "username": "user",
 "password":"password"
-}
+}`
 
-Then please choose Bearer Token authorization type on postman and paste your bearer token which you got from above url.
+Then  Bearer Token authorization type should be chosen on postman and should be pasted the bearer token which is got from above url.
 
-If you request without bearer token or with expired or with wrong bearer token you will be Unauthorized and forbidden error
+If the request without bearer token or with expired or with wrong bearer token is executed, The response will be unauthorized and forbidden error
 
 ### Test Coverage Rate
 
 Total test coverage rate as is;
 
-all classes	84,4% (38/45)	77,2% (159/206)	79,4% (351/442)
+all classes	83% (39/47)	76,8% (162/211)	79,6% (355/446)
 
 And details;
 
+com.casestudy.readingisgood	100% (1/1)	50% (1/2)	50% (1/2)
+
 com.casestudy.readingisgood.config	100% (1/1)	100% (5/5)	100% (14/14)
 
-com.casestudy.readingisgood.controller	100% (5/5)	42,9% (6/14)	37,5% (6/16)
+com.casestudy.readingisgood.controller	100% (5/5)	42,9% (6/14)	42,9% (6/14)
 
 com.casestudy.readingisgood.dto	100% (11/11)	93,2% (55/59)	93,2% (55/59)
 
@@ -214,10 +236,12 @@ com.casestudy.readingisgood.entity	77,8% (7/9)	79,6% (43/54)	80% (44/55)
 
 com.casestudy.readingisgood.enums	100% (1/1)	100% (2/2)	100% (2/2)
 
-com.casestudy.readingisgood.exception	16,7% (1/6)	4,3% (1/23)	2,3% (1/44)
+com.casestudy.readingisgood.exception	14,3% (1/7)	4% (1/25)	2,1% (1/48)
 
 com.casestudy.readingisgood.security	100% (7/7)	96,6% (28/29)	90,4% (75/83)
 
 com.casestudy.readingisgood.service	100% (1/1)	100% (2/2)	100% (69/69)
 
-com.casestudy.readingisgood.service.impl	100% (3/3)	100% (16/16)	85,7% (84/98)
+com.casestudy.readingisgood.service.impl	100% (4/4)	100% (19/19)	88% (88/100)
+
+

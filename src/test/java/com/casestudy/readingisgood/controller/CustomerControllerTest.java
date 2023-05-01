@@ -1,6 +1,6 @@
 package com.casestudy.readingisgood.controller;
 
-import com.casestudy.readingisgood.dto.CustomerDto;
+import com.casestudy.readingisgood.dto.CustomerDTO;
 import com.casestudy.readingisgood.security.JwtRequestDto;
 import com.casestudy.readingisgood.security.JwtResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +33,7 @@ class CustomerControllerTest {
 
 
     @Captor
-    private ArgumentCaptor<CustomerDto> customerDtoArgumentCaptor;
+    private ArgumentCaptor<CustomerDTO> customerDtoArgumentCaptor;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -56,22 +56,22 @@ class CustomerControllerTest {
     @Test
     void create() throws Exception {
 
-        CustomerDto customerDto = CustomerDto.builder()
+        CustomerDTO customerDto = CustomerDTO.builder()
                 .email("test_test@gmail.com")
                 .lastName("test_last_name")
                 .firstName("test_first_name")
                 .build();
 
-        when(customerController.persistNewCustomer(customerDtoArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(customerDto));
+        when(customerController.create(customerDtoArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(customerDto));
 
-        mockMvc.perform(post("/api/customer/save")
+        mockMvc.perform(post("/api/customer/create")
                         .content(objectMapper.writeValueAsBytes(customerDto))
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        CustomerDto capture = customerDtoArgumentCaptor.getValue();
+        CustomerDTO capture = customerDtoArgumentCaptor.getValue();
         assertThat(capture.getEmail()).isEqualTo(customerDto.getEmail());
         assertThat(capture.getFirstName()).isEqualTo(customerDto.getFirstName());
         assertThat(capture.getLastName()).isEqualTo(customerDto.getLastName());

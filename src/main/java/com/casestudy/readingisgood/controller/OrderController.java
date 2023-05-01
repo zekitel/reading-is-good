@@ -1,9 +1,13 @@
 package com.casestudy.readingisgood.controller;
 
-import com.casestudy.readingisgood.dto.CustomerOrdersRequestDto;
-import com.casestudy.readingisgood.dto.OrderDto;
-import com.casestudy.readingisgood.dto.OrderTimeIntervalsRequestDto;
-import com.casestudy.readingisgood.dto.OrderRequestDto;
+import com.casestudy.readingisgood.dto.CustomerOrdersRequestDTO;
+import com.casestudy.readingisgood.dto.OrderDTO;
+import com.casestudy.readingisgood.dto.OrderRequestDTO;
+import com.casestudy.readingisgood.dto.OrderTimeIntervalsRequestDTO;
+import com.casestudy.readingisgood.exception.DbNotFoundException;
+import com.casestudy.readingisgood.exception.StartDateIsGreaterThanEndDateException;
+import com.casestudy.readingisgood.exception.StockIsNotSufficientException;
+import com.casestudy.readingisgood.exception.StockValueChangedException;
 import com.casestudy.readingisgood.service.OrderService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,23 +28,23 @@ public class OrderController {
 
 
     @PostMapping("create")
-    public ResponseEntity<OrderDto> create(@RequestBody @Valid OrderRequestDto orderRequestDto) {
+    public ResponseEntity<OrderDTO> create(@RequestBody @Valid OrderRequestDTO orderRequestDto) throws DbNotFoundException, StockIsNotSufficientException, StockValueChangedException {
         return ResponseEntity.ok(orderService.create(orderRequestDto));
     }
 
-    @GetMapping("get")
-    public ResponseEntity<OrderDto> get(@RequestParam  @Positive @NotNull Long orderId) {
-        return ResponseEntity.ok(orderService.get(orderId));
+    @GetMapping("{id}")
+    public ResponseEntity<OrderDTO> get(@PathVariable @Positive @NotNull Long id) throws DbNotFoundException {
+        return ResponseEntity.ok(orderService.get(id));
     }
 
-    @PostMapping("listOrdersByDateInterval")
-    public ResponseEntity<List<OrderDto>> listOrdersByDateInterval(@RequestBody @Valid OrderTimeIntervalsRequestDto orderTimeIntervalsRequestDto) {
-        return ResponseEntity.ok(orderService.listOrdersByDateInterval(orderTimeIntervalsRequestDto.getStartTimeStamp(), orderTimeIntervalsRequestDto.getEndTimeStamp(), orderTimeIntervalsRequestDto.getPageNumber(), orderTimeIntervalsRequestDto.getPageSize()));
+    @PostMapping("list-by-date-interval")
+    public ResponseEntity<List<OrderDTO>> listByDateInterval(@RequestBody @Valid OrderTimeIntervalsRequestDTO orderTimeIntervalsRequestDto) throws StartDateIsGreaterThanEndDateException {
+        return ResponseEntity.ok(orderService.listByDateInterval(orderTimeIntervalsRequestDto));
     }
 
-    @PostMapping("listOrderByCustomer")
-    public ResponseEntity<List<OrderDto>> listOrderByCustomer(@RequestBody @Valid CustomerOrdersRequestDto customerOrdersRequestDto) {
-        return ResponseEntity.ok(orderService.listOrderByCustomer(customerOrdersRequestDto));
+    @PostMapping("list-by-customer")
+    public ResponseEntity<List<OrderDTO>> listByCustomer(@RequestBody @Valid CustomerOrdersRequestDTO customerOrdersRequestDto) {
+        return ResponseEntity.ok(orderService.listByCustomer(customerOrdersRequestDto));
     }
 
 }

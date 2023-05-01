@@ -1,7 +1,7 @@
 package com.casestudy.readingisgood.controller;
 
 
-import com.casestudy.readingisgood.dto.CustomerDto;
+import com.casestudy.readingisgood.dto.CustomerDTO;
 import com.casestudy.readingisgood.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,8 +19,8 @@ public class CustomerController {
     private final CustomerService customerService;
 
 
-    @PostMapping("save")
-    public ResponseEntity<CustomerDto> persistNewCustomer(@RequestBody @Valid CustomerDto customerDto) {
+    @PostMapping("create")
+    public ResponseEntity<CustomerDTO> create(@RequestBody @Valid CustomerDTO customerDto) {
         return ResponseEntity.ok(customerService.create(customerDto));
     }
 

@@ -1,20 +1,19 @@
 package com.casestudy.readingisgood.service;
 
-import com.casestudy.readingisgood.dto.BookDto;
+import com.casestudy.readingisgood.dto.BookDTO;
 import com.casestudy.readingisgood.entity.Book;
 import com.casestudy.readingisgood.exception.DbNotFoundException;
+import com.casestudy.readingisgood.exception.ResourceAlreadyExistsException;
 import com.casestudy.readingisgood.exception.StockValueChangedException;
 import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 
 public interface BookService {
 
     @Transactional
-    BookDto createNewBook(BookDto bookDto);
+    BookDTO persist(BookDTO bookDto) throws ResourceAlreadyExistsException;
 
     @Transactional
-    BookDto updateStock(Long id, Long stock) throws DbNotFoundException, StockValueChangedException;
+    BookDTO updateStock(Long id, Long stock) throws DbNotFoundException, StockValueChangedException;
 
-    @SneakyThrows
-    Book findBookById(Long bookId);
+    Book findById(Long bookId) throws DbNotFoundException;
 }

@@ -1,15 +1,15 @@
 package com.casestudy.readingisgood.service.impl;
 
-import com.casestudy.readingisgood.dto.BookDto;
+import com.casestudy.readingisgood.dto.BookDTO;
 import com.casestudy.readingisgood.entity.Book;
 import com.casestudy.readingisgood.exception.DbNotFoundException;
+import com.casestudy.readingisgood.exception.ResourceAlreadyExistsException;
 import com.casestudy.readingisgood.exception.StockValueChangedException;
 import com.casestudy.readingisgood.repository.BookRepository;
 import com.casestudy.readingisgood.service.BookService;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,12 +25,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto createNewBook(BookDto bookDto) {
+    public BookDTO persist(BookDTO bookDto) throws ResourceAlreadyExistsException {
         log.info("Book create started. reqeust data: . bookDto:{}", bookDto);
+
+        if (bookRepository.existsByIsbn(bookDto.getIsbn())) {
+            throw new ResourceAlreadyExistsException("The book is already exist with provided isbn!");
+        }
+
         Book book = modelMapper.map(bookDto, Book.class);
         Book result = bookRepository.save(book);
 
-        bookDto = BookDto.builder()
+        bookDto = BookDTO.builder()
                 .title(result.getTitle())
                 .isbn(result.getIsbn())
                 .price(result.getPrice())
@@ -44,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public BookDto updateStock(Long id, Long stock) throws DbNotFoundException, StockValueChangedException {
+    public BookDTO updateStock(Long id, Long stock) throws DbNotFoundException, StockValueChangedException {
         log.info("Book update stock started. Coming data id: {}, stock: {} ", id, stock);
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new DbNotFoundException("There is No Book Record on Database with id: " + id));
@@ -55,12 +60,11 @@ public class BookServiceImpl implements BookService {
             throw new StockValueChangedException("Book stock value is changed");
         }
         log.info("Book update stock finished. Response data of book: {} ", book);
-        return modelMapper.map(book, BookDto.class);
+        return modelMapper.map(book, BookDTO.class);
     }
 
-    @SneakyThrows
     @Override
-    public Book findBookById(Long bookId) {
+    public Book findById(Long bookId) throws DbNotFoundException {
         return bookRepository.findById(bookId).orElseThrow(() -> new DbNotFoundException("The book is not found"));
     }
 }

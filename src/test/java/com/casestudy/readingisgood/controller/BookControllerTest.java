@@ -1,6 +1,6 @@
 package com.casestudy.readingisgood.controller;
 
-import com.casestudy.readingisgood.dto.BookDto;
+import com.casestudy.readingisgood.dto.BookDTO;
 import com.casestudy.readingisgood.security.JwtRequestDto;
 import com.casestudy.readingisgood.security.JwtResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -39,7 +40,7 @@ class BookControllerTest {
 
 
     @Captor
-    private ArgumentCaptor<BookDto> bookDtoArgumentCaptor;
+    private ArgumentCaptor<BookDTO> bookDtoArgumentCaptor;
 
 
     @Captor
@@ -65,23 +66,23 @@ class BookControllerTest {
     @Test
     void createNewBook() throws Exception {
 
-        BookDto book1 = BookDto.builder()
+        BookDTO book1 = BookDTO.builder()
                 .title("Book1")
                 .author("Author1")
                 .isbn("11231334561")
-                .price(10.0)
+                .price(BigDecimal.valueOf(10.0))
                 .stock(4L)
                 .build();
 
-        when(bookController.createNewBook(bookDtoArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(book1));
+        when(bookController.create(bookDtoArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(book1));
 
-        mockMvc.perform(post("/api/book/save")
+        mockMvc.perform(post("/api/book/create")
                         .content(objectMapper.writeValueAsBytes(book1))
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        BookDto capture = bookDtoArgumentCaptor.getValue();
+        BookDTO capture = bookDtoArgumentCaptor.getValue();
         assertThat(capture.getStock()).isEqualTo(book1.getStock());
         assertThat(capture.getPrice()).isEqualTo(book1.getPrice());
         assertThat(capture.getIsbn()).isEqualTo(book1.getIsbn());
@@ -97,12 +98,11 @@ class BookControllerTest {
         int id = 1;
         int stock = 40;
 
-        when(bookController.updateBookStock(longArgumentCaptor.capture(), longStockArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(new BookDto()));
+        when(bookController.updateStock(longArgumentCaptor.capture(), longStockArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(new BookDTO()));
 
-        mockMvc.perform(put("/api/book/updateBookStock")
+        mockMvc.perform(put("/api/book/update-stock/"+id)
                 .header("Authorization", token)
-                .param("bookId", Integer.toString(id))
-                .param("bookStock", Integer.toString(stock))
+                .param("stock", Integer.toString(stock))
                 .contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
 
         Long captureBookId = longArgumentCaptor.getValue();

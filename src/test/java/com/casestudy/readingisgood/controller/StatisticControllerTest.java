@@ -59,10 +59,9 @@ class StatisticControllerTest {
 
         long customerId = 1L;
 
-        when(statisticController.monthlyOrderStatistics(longArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(List.of()));
+        when(statisticController.monthlyOrder(longArgumentCaptor.capture())).thenReturn(ResponseEntity.ok(List.of()));
 
-        mockMvc.perform(get("/api/statistic/monthlyOrderStatistics")
-                        .param("customerId", Long.toString(customerId))
+        mockMvc.perform(get("/api/statistic/monthly-order/"+customerId)
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

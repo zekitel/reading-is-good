@@ -31,6 +31,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(serverErrorModel);
     }
 
+    @ExceptionHandler({ResourceAlreadyExistsException.class})
+    protected ResponseEntity<Object> resourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+        ServerErrorModel serverErrorModel = new ServerErrorModel(HttpStatus.BAD_REQUEST);
+        serverErrorModel.setMessage(ex.getMessage());
+        return buildResponseEntity(serverErrorModel);
+    }
+
     @ExceptionHandler({StockIsNotSufficientException.class})
     protected ResponseEntity<Object> stockIsNotSufficientException(StockIsNotSufficientException ex) {
         ServerErrorModel serverErrorModel = new ServerErrorModel(HttpStatus.BAD_REQUEST);

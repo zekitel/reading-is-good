@@ -1,27 +1,25 @@
 package com.casestudy.readingisgood.service;
 
-import com.casestudy.readingisgood.dto.CustomerOrdersRequestDto;
-import com.casestudy.readingisgood.dto.MonthlyStatisticDto;
-import com.casestudy.readingisgood.dto.OrderDto;
-import com.casestudy.readingisgood.dto.OrderRequestDto;
+import com.casestudy.readingisgood.dto.CustomerOrdersRequestDTO;
+import com.casestudy.readingisgood.dto.OrderDTO;
+import com.casestudy.readingisgood.dto.OrderRequestDTO;
+import com.casestudy.readingisgood.dto.OrderTimeIntervalsRequestDTO;
+import com.casestudy.readingisgood.exception.DbNotFoundException;
+import com.casestudy.readingisgood.exception.StartDateIsGreaterThanEndDateException;
+import com.casestudy.readingisgood.exception.StockIsNotSufficientException;
+import com.casestudy.readingisgood.exception.StockValueChangedException;
 import jakarta.transaction.Transactional;
-import lombok.SneakyThrows;
 
 import java.util.List;
 
 public interface OrderService {
 
-    @SneakyThrows
     @Transactional
-    OrderDto create(OrderRequestDto orderRequestDto);
+    OrderDTO create(OrderRequestDTO orderRequestDto) throws DbNotFoundException, StockIsNotSufficientException, StockValueChangedException;
 
     @Transactional
-    OrderDto get(Long id);
+    OrderDTO get(Long id) throws DbNotFoundException;
+    List<OrderDTO> listByDateInterval(OrderTimeIntervalsRequestDTO orderTimeIntervalsRequestDTO) throws StartDateIsGreaterThanEndDateException;
 
-    @SneakyThrows
-    List<OrderDto> listOrdersByDateInterval(long startDate, long endDate, int pageNo, int pageSize);
-
-    List<MonthlyStatisticDto> monthlyOrderStatistics(Long customerId);
-
-    List<OrderDto> listOrderByCustomer(CustomerOrdersRequestDto customerOrdersRequestDto);
+    List<OrderDTO> listByCustomer(CustomerOrdersRequestDTO customerOrdersRequestDto);
 }
