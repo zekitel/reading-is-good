@@ -32,7 +32,7 @@ Aim of Reading Is Good Applicaiton is to deliver books to the customers who are 
 
 Welcome on reading is good board
 
-You will be find details about project bellow.
+You will be finding details about project bellow.
 
 App will run on 9090 port.
 
